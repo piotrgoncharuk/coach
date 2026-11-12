@@ -1,0 +1,143 @@
+@import 'tailwindcss';
+
+/* ───────────────────────── Дизайн-токены ─────────────────────────
+   Тёмная тема — по умолчанию. Светлая — класс .light на <html>.
+   Один акцентный цвет: оранжевый #FF6A2B.
+   ────────────────────────────────────────────────────────────────── */
+:root {
+  color-scheme: dark;
+
+  --c-bg: #0b0d10;
+  --c-surface: #14181d;
+  --c-raised: #1c222a;
+  --c-border: #262d36;
+  --c-text: #f2f5f8;
+  --c-text-2: #9ba7b4;
+  --c-text-3: #5f6b78;
+
+  --c-accent: #ff6a2b;
+  --c-accent-press: #e25413;
+  --c-accent-soft: rgb(255 106 43 / 0.12);
+
+  --c-success: #39d98a;
+  --c-warn: #ffb020;
+  --c-danger: #ff4d4f;
+  --c-record: #ffc83d;
+
+  --shadow-sheet: 0 -8px 32px rgb(0 0 0 / 0.45);
+  --shadow-card: 0 1px 2px rgb(0 0 0 / 0.3);
+}
+
+:root.light {
+  color-scheme: light;
+
+  --c-bg: #f6f7f9;
+  --c-surface: #ffffff;
+  --c-raised: #ffffff;
+  --c-border: #e3e7ec;
+  --c-text: #11161c;
+  --c-text-2: #5a6673;
+  --c-text-3: #8b97a4;
+
+  --c-accent: #e2540f;
+  --c-accent-press: #bf4409;
+  --c-accent-soft: rgb(226 84 15 / 0.1);
+
+  --c-success: #17a35f;
+  --c-warn: #b36b00;
+  --c-danger: #d93437;
+  --c-record: #b8860b;
+
+  --shadow-sheet: 0 -8px 32px rgb(16 24 40 / 0.12);
+  --shadow-card: 0 1px 2px rgb(16 24 40 / 0.06);
+}
+
+@theme inline {
+  --color-bg: var(--c-bg);
+  --color-surface: var(--c-surface);
+  --color-raised: var(--c-raised);
+  --color-border: var(--c-border);
+  --color-fg: var(--c-text);
+  --color-fg-2: var(--c-text-2);
+  --color-fg-3: var(--c-text-3);
+  --color-accent: var(--c-accent);
+  --color-accent-press: var(--c-accent-press);
+  --color-accent-soft: var(--c-accent-soft);
+  --color-success: var(--c-success);
+  --color-warn: var(--c-warn);
+  --color-danger: var(--c-danger);
+  --color-record: var(--c-record);
+
+  /* Шкала текста. 17px для полей ввода — ниже 16px Safari зумит страницу. */
+  --text-xs: 0.75rem;     /* 12 — подписи */
+  --text-sm: 0.875rem;    /* 14 — вторичный текст */
+  --text-base: 1rem;      /* 16 */
+  --text-input: 1.0625rem;/* 17 — любое поле ввода */
+  --text-lg: 1.25rem;     /* 20 — заголовок карточки */
+  --text-xl: 1.5rem;      /* 24 — заголовок экрана */
+  --text-2xl: 2rem;       /* 32 */
+  --text-3xl: 3rem;       /* 48 — таймер */
+  --text-4xl: 3.5rem;     /* 56 — вес и повторы в зале */
+
+  --radius-card: 1rem;
+  --radius-lg: 1.5rem;
+
+  --font-sans: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', system-ui, sans-serif;
+
+  /* Минимальная зона нажатия и высота главной кнопки */
+  --spacing-touch: 3rem;    /* 48px */
+  --spacing-action: 4rem;   /* 64px */
+}
+
+@layer base {
+  html {
+    background: var(--c-bg);
+    -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent;
+  }
+  body {
+    margin: 0;
+    background: var(--c-bg);
+    color: var(--c-text);
+    font-family: var(--font-sans);
+    font-size: var(--text-base);
+    line-height: 1.4;
+    overscroll-behavior-y: none;
+  }
+  /* Цифры не должны прыгать в таймере и счётчиках */
+  .tnum, input[type='number'], output, time {
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: 'tnum' 1;
+  }
+  /* Safari зумит при фокусе, если шрифт меньше 16px */
+  input, select, textarea, button {
+    font-family: inherit;
+    font-size: var(--text-input);
+  }
+  button { touch-action: manipulation; }
+  :focus-visible { outline: 2px solid var(--c-accent); outline-offset: 2px; }
+}
+
+/* Безопасные зоны: чёлка и индикатор home */
+@utility pt-safe { padding-top: max(env(safe-area-inset-top), 0.5rem); }
+@utility pb-safe { padding-bottom: max(env(safe-area-inset-bottom), 0.5rem); }
+@utility px-safe {
+  padding-left: max(env(safe-area-inset-left), 1rem);
+  padding-right: max(env(safe-area-inset-right), 1rem);
+}
+@utility mb-safe { margin-bottom: max(env(safe-area-inset-bottom), 0.5rem); }
+@utility h-screen-safe { height: 100dvh; }
+
+/* Микроанимации — только обратная связь, и только если её не отключили */
+@keyframes coach-pop { 0% { transform: scale(0.94); } 60% { transform: scale(1.03); } 100% { transform: scale(1); } }
+@keyframes coach-flash { 0%, 100% { opacity: 0; } 25% { opacity: 1; } }
+@utility animate-pop { animation: coach-pop 180ms ease-out; }
+@utility animate-flash { animation: coach-flash 700ms ease-out; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
