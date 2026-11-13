@@ -28,3 +28,7 @@ dist-ssr
 .env.local
 dev-dist
 coverage
+
+# архивы для ручной передачи, не для репозитория
+*.tgz
+*.zip
