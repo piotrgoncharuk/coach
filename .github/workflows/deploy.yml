@@ -35,11 +35,10 @@ jobs:
       - name: Тесты
         run: npm test
 
+      # Pages включаются один раз руками: Settings → Pages → Source: GitHub Actions.
+      # Токен workflow создать сайт не может — прав не хватает по устройству GitHub.
       - name: Настроить Pages
         uses: actions/configure-pages@v5
-        with:
-          # включает Pages в настройках репозитория, если они ещё не включены
-          enablement: true
 
       - name: Сборка
         run: npm run build
