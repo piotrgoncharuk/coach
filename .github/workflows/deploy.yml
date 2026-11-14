@@ -1,0 +1,61 @@
+# Каждый коммит в main: тесты → сборка → выкладка на GitHub Pages.
+# Адрес: https://piotrgoncharuk.github.io/coach/
+name: Сборка и выкладка
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Выкладка одна за раз; незаконченную предыдущую отменяем.
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Тесты и сборка
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+
+      - name: Установка зависимостей
+        run: npm ci
+
+      - name: Тесты
+        run: npm test
+
+      - name: Настроить Pages
+        uses: actions/configure-pages@v5
+        with:
+          # включает Pages в настройках репозитория, если они ещё не включены
+          enablement: true
+
+      - name: Сборка
+        run: npm run build
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    name: Выкладка
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Выложить на Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
