@@ -30,7 +30,7 @@ const ProgramEditor = lazy(() => import('./screens/program/ProgramEditor').then(
 const VersionsScreen = lazy(() => import('./screens/program/VersionsScreen').then((m) => ({ default: m.VersionsScreen })))
 const WeekTemplateScreen = lazy(() => import('./screens/program/WeekTemplateScreen').then((m) => ({ default: m.WeekTemplateScreen })))
 const Onboarding = lazy(() => import('./screens/Onboarding').then((m) => ({ default: m.Onboarding })))
-const ProgressScreen = lazy(() => import('./screens/Stubs').then((m) => ({ default: m.ProgressScreen })))
+const ProgressScreen = lazy(() => import('./screens/progress/ProgressScreen').then((m) => ({ default: m.ProgressScreen })))
 const ProfileScreen = lazy(() => import('./screens/Profile').then((m) => ({ default: m.ProfileScreen })))
 
 /** Экраны без нижней навигации: тренировке нужен весь экран. */

@@ -30,7 +30,7 @@ test('видео: неверная ссылка отклоняется, верн
 
 test('тренировка: запись подхода в одно касание, таймер, итог, история', async ({ page }) => {
   await openApp(page)
-  await page.getByRole('button', { name: /Начать тренировку|Всё равно потренироваться/ }).click()
+  await page.getByRole('button', { name: /Начать тренировку|Тренировка вне плана/ }).click()
   await page.getByRole('button', { name: 'Пустая тренировка' }).click()
   await page.getByRole('button', { name: 'Добавить упражнение' }).first().click()
   await page.getByLabel('Поиск упражнения').fill('приседания со штангой')

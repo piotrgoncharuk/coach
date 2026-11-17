@@ -93,3 +93,16 @@ export async function pendingCount(): Promise<number> {
 export function alive<T extends Syncable>(rows: T[]): T[] {
   return rows.filter((r) => !r.deletedAt)
 }
+
+/**
+ * Записать строку как есть, с её собственным временем правки, и поставить в
+ * очередь. Нужно для восстановления из копии: обычный save() поставил бы
+ * текущее время, и старая запись из копии перебила бы более новую на сервере.
+ */
+export async function putRaw(table: TableName, row: Syncable): Promise<void> {
+  const target = db.table(table)
+  await db.transaction('rw', [target, db.outbox], async () => {
+    await target.put(row)
+    await enqueue(table, row.id, row as unknown as Record<string, unknown>, row.updatedAt)
+  })
+}

@@ -74,7 +74,7 @@ export function TodayScreen() {
         <Card>
           <div className="text-xs uppercase tracking-wide text-fg-3">{data?.football ? 'Сегодня футбол' : 'Сегодня отдых'}</div>
           <div className="mt-0.5 text-lg font-semibold">{data?.doneToday.length ? 'Тренировка сделана' : data?.football ? 'Тренировки в зале нет' : 'Восстанавливайся'}</div>
-          <Button size="action" className="mt-3" onClick={() => navigate('/workout')}>Всё равно потренироваться</Button>
+          <Button size="action" className="mt-3" onClick={() => navigate('/workout')}>Тренировка вне плана</Button>
         </Card>
       )}
 

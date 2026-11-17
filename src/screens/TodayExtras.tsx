@@ -1,4 +1,14 @@
-/** Готовность, белок и заметка тренера — наполняются на этапах 4 и 5. */
+import { ReadinessCard } from './progress/ReadinessCard'
+import { ProteinCard } from './progress/ProteinCard'
+import { CoachNoteCard } from './coach/CoachNoteCard'
+
+/** Готовность, питание за день и последняя заметка тренера. */
 export function TodayExtras() {
-  return null
+  return (
+    <>
+      <ReadinessCard compact />
+      <ProteinCard />
+      <CoachNoteCard />
+    </>
+  )
 }
