@@ -29,6 +29,7 @@ const ProgramScreen = lazy(() => import('./screens/program/ProgramScreen').then(
 const ProgramEditor = lazy(() => import('./screens/program/ProgramEditor').then((m) => ({ default: m.ProgramEditor })))
 const VersionsScreen = lazy(() => import('./screens/program/VersionsScreen').then((m) => ({ default: m.VersionsScreen })))
 const WeekTemplateScreen = lazy(() => import('./screens/program/WeekTemplateScreen').then((m) => ({ default: m.WeekTemplateScreen })))
+const CoachScreen = lazy(() => import('./screens/coach/CoachScreen').then((m) => ({ default: m.CoachScreen })))
 const Onboarding = lazy(() => import('./screens/Onboarding').then((m) => ({ default: m.Onboarding })))
 const ProgressScreen = lazy(() => import('./screens/progress/ProgressScreen').then((m) => ({ default: m.ProgressScreen })))
 const ProfileScreen = lazy(() => import('./screens/Profile').then((m) => ({ default: m.ProfileScreen })))
@@ -123,6 +124,7 @@ export default function App() {
           <Route path="/program/week" element={<WeekTemplateScreen />} />
           <Route path="/progress/*" element={<ProgressScreen />} />
           <Route path="/profile" element={<ProfileScreen />} />
+          <Route path="/coach" element={<CoachScreen />} />
           <Route path="/install" element={<InstallScreen onDone={() => history.back()} />} />
           <Route path="/login" element={<LoginScreen onContinueLocal={() => setSkipLogin(true)} />} />
           <Route path="*" element={<Navigate to="/" replace />} />

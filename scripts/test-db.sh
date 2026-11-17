@@ -31,3 +31,6 @@ echo "→ применяю миграции"
 su postgres -c "$PSQL -d coach_test -f $ROOT/supabase/test/00_auth_stub.sql $(for f in "$ROOT"/supabase/migrations/*.sql; do printf -- '-f %s ' "$f"; done)" >/dev/null
 echo "→ проверяю изоляцию данных и мягкое удаление"
 su postgres -c "$PSQL -d coach_test -f $ROOT/supabase/test/01_rls.sql" | grep -E 'OK:|ПРОВАЛ'
+
+echo "→ MCP-сервер на настоящей базе: транспорт, инструменты, изоляция пользователей"
+PGHOST="$SOCK" PGPORT="$PORT" PGDATABASE=coach_test npx vitest run --config "$ROOT/vitest.db.config.ts" 2>&1 | grep -E "✓|×|Test Files|Tests |FAIL|Error" | grep -vE "^\s*✓" || true

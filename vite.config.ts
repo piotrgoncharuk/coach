@@ -86,7 +86,7 @@ export default defineConfig({
   ],
   test: {
     environment: 'node',
-    include: ['src/**/*.test.ts'],
+    include: ['src/**/*.test.ts', 'supabase/functions/_shared/**/*.test.ts'],
     coverage: { include: ['src/domain/**/*.ts'], exclude: ['src/domain/**/*.test.ts'] },
   },
 })

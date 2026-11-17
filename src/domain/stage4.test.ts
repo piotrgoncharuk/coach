@@ -129,3 +129,53 @@ describe('темп на шумных данных', () => {
     expect(paceKgPerWeek(pts)!).toBeLessThan(0.35)
   })
 })
+
+import { buildCoachSummary } from './summary'
+import { buildStarterProgram } from './program'
+
+describe('сводка для тренера', () => {
+  const base = {
+    from: '2026-11-11', to: '2026-11-17',
+    profile: { name: 'Пётр', heightCm: 193, limitations: ['back', 'hamstring'], gymWeekdays: [2, 4, 6], footballWeekdays: [0], kcalTarget: 3000, proteinTarget: 190 },
+    program: { ...buildStarterProgram(['hamstring']), version: 2 },
+    nameOf: (id: string) => ({ Barbell_Squat: 'Приседания со штангой' } as Record<string, string>)[id] ?? id,
+    refOf: (id: string) => id,
+    sessions: [{ date: '2026-11-17', dayName: 'День A', durationMin: 65, difficulty: 7, note: null, exercises: [{ name: 'Приседания со штангой', sets: [{ weightKg: 40, reps: 10, rir: null, type: 'warmup' }, { weightKg: 82.5, reps: 8, rir: 2, type: 'work' }] }] }],
+    plannedGym: 3,
+    volume: { chest: 3, back: 6, shoulders: 3, arms: 1.5, legs: 9, core: 3 },
+    football: [{ date: '2026-11-15', durationMin: 90, intensity: 7 }],
+    readiness: [{ date: '2026-11-17', score: 87, flag: 'green' }],
+    weight: { avgKg: 97.2, paceKgWeek: 0.2 },
+    nutrition: { kcal: 2850, proteinG: 178, daysLogged: 5 },
+    records: [{ exercise: 'Приседания со штангой', kind: 'weight', value: 82.5 }],
+    notes: [{ date: '2026-11-10', text: 'Бедро: RIR не ниже 2' }],
+  }
+
+  it('содержит цифры с единицами и ограничения', () => {
+    const t = buildCoachSummary(base)
+    expect(t).toContain('Сводка Coach за 7 дн.')
+    expect(t).toContain('Ограничения: спина, поясница, задняя поверхность бедра.')
+    expect(t).toContain('Зал: вт, чт, сб. Футбол: вс.')
+    expect(t).toContain('ТРЕНИРОВКИ (1 из 3 запланированных)')
+    expect(t).toContain('Приседания со штангой: 82,5×8 RIR2')
+    expect(t).not.toContain('40×10') // разминка не в сводке
+    expect(t).toContain('ноги 9')
+    expect(t).toContain('15 ноя: 90 мин, тяжесть 7/10')
+    expect(t).toContain('Среднее 87')
+    expect(t).toContain('темп +0,2 кг/нед')
+    expect(t).toContain('Бедро: RIR не ниже 2')
+  })
+
+  it('программа — с id упражнений для правок, и в конце формат ответа', () => {
+    const t = buildCoachSummary(base)
+    expect(t).toContain('Приседания со штангой [Barbell_Squat]: 3 × 6–8')
+    expect(t).toContain('"changes"')
+  })
+
+  it('пустой период — честно «не было»', () => {
+    const t = buildCoachSummary({ ...base, sessions: [], football: [], readiness: [], records: [], notes: [], program: null, weight: { avgKg: null, paceKgWeek: null }, nutrition: { kcal: 0, proteinG: 0, daysLogged: 0 } })
+    expect(t).toContain('Нет — свободные тренировки.')
+    expect(t).toContain('Чек-инов не было.')
+    expect(t).toContain('Вес: взвешиваний не было.')
+  })
+})

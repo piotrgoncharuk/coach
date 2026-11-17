@@ -1,7 +1,7 @@
 import { useLiveQuery } from 'dexie-react-hooks'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Badge, Button, Card, Field, Screen } from '../ui/components'
+import { Button, Card, Field, Screen } from '../ui/components'
 import { SyncBadge } from '../ui/SyncBadge'
 import { db } from '../lib/db'
 import { save } from '../lib/repo'
@@ -143,8 +143,9 @@ export function ProfileScreen() {
         </Button>
       </Card>
 
-      <div className="pb-4 text-center">
-        <Badge>этапы 4–5: экспорт, импорт и токен для тренера</Badge>
+      <div className="grid grid-cols-2 gap-2 pb-4">
+        <Button onClick={() => navigate('/coach')}>Тренер (Grok)</Button>
+        <Button onClick={() => navigate('/progress/analytics')}>Экспорт и импорт</Button>
       </div>
     </Screen>
   )
