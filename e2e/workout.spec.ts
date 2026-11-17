@@ -1,9 +1,8 @@
 import { expect, test } from '@playwright/test'
-import { openApp, skipOnboarding } from './helpers'
+import { openApp } from './helpers'
 
 test('справочник: поиск по-русски, карточка с фото и техникой', async ({ page }) => {
   await openApp(page)
-  await skipOnboarding(page)
   await page.getByRole('link', { name: 'Упражнения' }).click()
   await page.getByLabel('Поиск упражнений').fill('жим лежа')
   await expect(page.getByText('Жим штанги лёжа средним хватом')).toBeVisible({ timeout: 20_000 })
@@ -31,8 +30,7 @@ test('видео: неверная ссылка отклоняется, верн
 
 test('тренировка: запись подхода в одно касание, таймер, итог, история', async ({ page }) => {
   await openApp(page)
-  await skipOnboarding(page)
-  await page.getByRole('button', { name: 'Начать тренировку' }).click()
+  await page.getByRole('button', { name: /Начать тренировку|Всё равно потренироваться/ }).click()
   await page.getByRole('button', { name: 'Пустая тренировка' }).click()
   await page.getByRole('button', { name: 'Добавить упражнение' }).first().click()
   await page.getByLabel('Поиск упражнения').fill('приседания со штангой')

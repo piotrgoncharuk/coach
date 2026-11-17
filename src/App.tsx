@@ -13,6 +13,8 @@ import { initTheme } from './lib/theme'
 import { META, getMeta, setMeta } from './lib/db'
 import { isCloudConfigured } from './lib/supabase'
 import { ensureExercises } from './lib/exerciseData'
+import { useLiveQuery } from 'dexie-react-hooks'
+import { db } from './lib/db'
 
 // Экраны грузятся по требованию: первый запуск в зале не тянет графики и аналитику.
 const WorkoutScreen = lazy(() => import('./screens/workout/WorkoutScreen').then((m) => ({ default: m.WorkoutScreen })))
@@ -23,7 +25,11 @@ const CustomExerciseScreen = lazy(() => import('./screens/exercises/CustomExerci
 const VideoPinsScreen = lazy(() => import('./screens/exercises/VideoPinsScreen').then((m) => ({ default: m.VideoPinsScreen })))
 const HistoryScreen = lazy(() => import('./screens/history/HistoryScreen').then((m) => ({ default: m.HistoryScreen })))
 const SessionScreen = lazy(() => import('./screens/history/SessionScreen').then((m) => ({ default: m.SessionScreen })))
-const ProgramScreen = lazy(() => import('./screens/Stubs').then((m) => ({ default: m.ProgramScreen })))
+const ProgramScreen = lazy(() => import('./screens/program/ProgramScreen').then((m) => ({ default: m.ProgramScreen })))
+const ProgramEditor = lazy(() => import('./screens/program/ProgramEditor').then((m) => ({ default: m.ProgramEditor })))
+const VersionsScreen = lazy(() => import('./screens/program/VersionsScreen').then((m) => ({ default: m.VersionsScreen })))
+const WeekTemplateScreen = lazy(() => import('./screens/program/WeekTemplateScreen').then((m) => ({ default: m.WeekTemplateScreen })))
+const Onboarding = lazy(() => import('./screens/Onboarding').then((m) => ({ default: m.Onboarding })))
 const ProgressScreen = lazy(() => import('./screens/Stubs').then((m) => ({ default: m.ProgressScreen })))
 const ProfileScreen = lazy(() => import('./screens/Profile').then((m) => ({ default: m.ProfileScreen })))
 
@@ -43,6 +49,7 @@ export default function App() {
   const [user, setUser] = useState<AuthUser | null>(null)
   const [skipLogin, setSkipLogin] = useState(false)
   const [showInstall, setShowInstall] = useState(false)
+  const profile = useLiveQuery(() => (user ? db.profiles.get(user.id) : undefined), [user?.id])
 
   useEffect(() => {
     let stopSync = () => {}
@@ -85,6 +92,15 @@ export default function App() {
     )
   }
 
+  if (profile === undefined) return <Loading />
+  if (profile && !profile.onboardedAt) {
+    return (
+      <Suspense fallback={<Loading />}>
+        <Onboarding profile={profile} onDone={() => {}} />
+      </Suspense>
+    )
+  }
+
   const hideNav = FULLSCREEN.some((p) => location.pathname.startsWith(p))
 
   return (
@@ -101,7 +117,10 @@ export default function App() {
           <Route path="/videos" element={<VideoPinsScreen />} />
           <Route path="/history" element={<HistoryScreen />} />
           <Route path="/history/:id" element={<SessionScreen />} />
-          <Route path="/program/*" element={<ProgramScreen />} />
+          <Route path="/program" element={<ProgramScreen />} />
+          <Route path="/program/edit" element={<ProgramEditor />} />
+          <Route path="/program/versions" element={<VersionsScreen />} />
+          <Route path="/program/week" element={<WeekTemplateScreen />} />
           <Route path="/progress/*" element={<ProgressScreen />} />
           <Route path="/profile" element={<ProfileScreen />} />
           <Route path="/install" element={<InstallScreen onDone={() => history.back()} />} />

@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { addDays, startOfWeek, weekDates, weekday, daysBetween, humanDate, localDate } from './dates'
+import { addDays, startOfWeek, weekDates, weekday, daysBetween, humanDate, localDate, dateWithCase } from './dates'
 
 describe('даты', () => {
   it('местная дата не уезжает в UTC', () => {
@@ -21,7 +21,9 @@ describe('даты', () => {
     expect(weekday('2026-11-22')).toBe(0)
     expect(daysBetween('2026-11-16', '2026-11-23')).toBe(7)
   })
-  it('по-русски', () => {
+  it('по-русски, с падежами', () => {
     expect(humanDate('2026-11-17')).toBe('вторник, 17 ноября')
+    expect(dateWithCase('2026-11-20', 'acc')).toBe('пятницу, 20 ноября')
+    expect(dateWithCase('2026-11-18', 'ins')).toBe('средой, 18 ноября')
   })
 })

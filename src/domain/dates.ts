@@ -43,6 +43,10 @@ export function weekDates(date: string): string[] {
 
 export const WEEKDAY_SHORT = ['вс', 'пн', 'вт', 'ср', 'чт', 'пт', 'сб']
 export const WEEKDAY_LONG = ['воскресенье', 'понедельник', 'вторник', 'среда', 'четверг', 'пятница', 'суббота']
+/** «на пятницу» */
+export const WEEKDAY_ACC = ['воскресенье', 'понедельник', 'вторник', 'среду', 'четверг', 'пятницу', 'субботу']
+/** «с пятницей» */
+export const WEEKDAY_INS = ['воскресеньем', 'понедельником', 'вторником', 'средой', 'четвергом', 'пятницей', 'субботой']
 export const MONTH_GEN = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря']
 export const MONTH_SHORT = ['янв', 'фев', 'мар', 'апр', 'мая', 'июн', 'июл', 'авг', 'сен', 'окт', 'ноя', 'дек']
 
@@ -50,6 +54,12 @@ export function humanDate(date: string, withWeekday = true): string {
   const d = parseLocal(date)
   const base = `${d.getDate()} ${MONTH_GEN[d.getMonth()]}`
   return withWeekday ? `${WEEKDAY_LONG[d.getDay()]}, ${base}` : base
+}
+
+/** «на пятницу, 20 ноября» или «с пятницей, 20 ноября» */
+export function dateWithCase(date: string, form: 'acc' | 'ins'): string {
+  const d = parseLocal(date)
+  return `${(form === 'acc' ? WEEKDAY_ACC : WEEKDAY_INS)[d.getDay()]}, ${d.getDate()} ${MONTH_GEN[d.getMonth()]}`
 }
 
 export function shortDate(date: string): string {
