@@ -32,3 +32,9 @@ coverage
 # архивы для ручной передачи, не для репозитория
 *.tgz
 *.zip
+
+# генерируется из data/ при сборке
+public/data/
+public/exercise-img/
+test-results
+playwright-report

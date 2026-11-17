@@ -1,5 +1,6 @@
 import Dexie, { type EntityTable } from 'dexie'
 import type {
+  MediaRow,
   ApiToken, BodyMetric, CalendarEvent, CoachNote, Exercise, MetaRow, NutritionEntry,
   OutboxItem, PersonalRecord, Profile, Program, ProgramDay, ProgramExercise, Proposal,
   ReadinessCheckin, SavedMeal, SessionExercise, SetRow, UserExercisePref, WorkoutSession,
@@ -64,6 +65,7 @@ export class CoachDb extends Dexie {
   coachNotes!: EntityTable<CoachNote, 'id'>
   proposals!: EntityTable<Proposal, 'id'>
   apiTokens!: EntityTable<ApiToken, 'id'>
+  media!: EntityTable<MediaRow, 'id'>
   outbox!: EntityTable<OutboxItem, 'seq'>
   meta!: EntityTable<MetaRow, 'key'>
 
@@ -91,6 +93,11 @@ export class CoachDb extends Dexie {
       outbox: '++seq, table, rowId, createdAt',
       meta: 'key',
     })
+    // v2: свои фото упражнений (только на устройстве) и индекс категории
+    this.version(2).stores({
+      exercises: 'id, slug, nameRu, equipment, category, ownerId, updatedAt, *primaryMuscles',
+      media: 'id, createdAt',
+    })
   }
 }
 
@@ -115,6 +122,9 @@ export const META = {
   activeSessionId: 'workout:activeSessionId',
   theme: 'ui:theme',
   installPromptSeen: 'ui:installPromptSeen',
+  exercisesVersion: 'data:exercisesVersion',
+  rest: 'workout:rest',
+  currentExercise: 'workout:currentExercise',
 } as const
 
 /** Какой тип строки лежит в какой таблице — чтобы save() проверял поля. */

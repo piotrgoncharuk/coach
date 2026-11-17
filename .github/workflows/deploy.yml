@@ -40,6 +40,16 @@ jobs:
       - name: Настроить Pages
         uses: actions/configure-pages@v5
 
+      # 1700 фото упражнений: сжимаются из открытой базы один раз на коммит базы
+      - name: Кэш фото упражнений
+        uses: actions/cache@v4
+        with:
+          path: public/exercise-img
+          key: exercise-img-${{ hashFiles('scripts/build-exercise-images.mjs', 'scripts/build-exercise-data.mjs') }}
+
+      - name: Фото упражнений
+        run: npm run exercises:images
+
       - name: Сборка
         run: npm run build
 

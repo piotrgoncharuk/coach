@@ -27,6 +27,12 @@ export interface Profile extends Syncable {
   restSecDefault: number
   limitations: string[]
   onboardedAt: string | null
+  /** Дни зала по умолчанию: 0 — воскресенье … 6 — суббота. */
+  gymWeekdays: number[]
+  /** Постоянные дни футбола. */
+  footballWeekdays: number[]
+  /** Понедельник текущей или последней разгрузочной недели. */
+  deloadStart: string | null
 }
 
 export interface Exercise extends Syncable {
@@ -212,6 +218,13 @@ export interface ApiToken extends Owned {
   scopes: string[]
   lastUsedAt: string | null
   revokedAt: string | null
+  createdAt: string
+}
+
+/** Своё фото упражнения. Хранится только на устройстве, пока нет облачного хранилища. */
+export interface MediaRow {
+  id: string
+  blob: Blob
   createdAt: string
 }
 

@@ -40,12 +40,32 @@ export default defineConfig({
         ],
       },
       workbox: {
-        globPatterns: ['**/*.{js,css,html,svg,png,webp,woff2}'],
+        // Оболочка и справочник — в предзагрузку. 1700 фото упражнений туда не идут
+        // (это 22 МБ): они кэшируются при первом просмотре и дальше живут офлайн.
+        globPatterns: ['**/*.{js,css,html,svg,png,woff2,json}'],
+        globIgnores: ['exercise-img/**', 'splash/**'],
+        maximumFileSizeToCacheInBytes: 3 * 1024 * 1024,
         navigateFallback: `${BASE}index.html`,
         cleanupOutdatedCaches: true,
         runtimeCaching: [
           {
-            // Фото упражнений из Supabase Storage — держим офлайн надолго.
+            // Фото упражнений из сборки: первый просмотр — из сети, дальше — из кэша.
+            urlPattern: ({ url }) => url.pathname.startsWith(`${BASE}exercise-img/`),
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'coach-exercise-img',
+              expiration: { maxEntries: 2000, maxAgeSeconds: 60 * 60 * 24 * 365 },
+              cacheableResponse: { statuses: [0, 200] },
+            },
+          },
+          {
+            // Splash-экраны нужны только при запуске с домашнего экрана.
+            urlPattern: ({ url }) => url.pathname.startsWith(`${BASE}splash/`),
+            handler: 'CacheFirst',
+            options: { cacheName: 'coach-splash', expiration: { maxEntries: 20 } },
+          },
+          {
+            // Свои фото упражнений после подключения Supabase Storage.
             urlPattern: /\/storage\/v1\/object\/public\/.*\.(?:webp|png|jpg|jpeg)$/i,
             handler: 'CacheFirst',
             options: {

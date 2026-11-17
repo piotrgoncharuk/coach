@@ -159,6 +159,9 @@ export async function ensureProfile(userId: string, displayName = ''): Promise<P
     restSecDefault: 120,
     limitations: [],
     onboardedAt: null,
+    gymWeekdays: [],
+    footballWeekdays: [],
+    deloadStart: null,
     updatedAt: ts,
     deletedAt: null,
   }
