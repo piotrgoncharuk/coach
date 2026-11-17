@@ -38,7 +38,7 @@ export function VideoBlock({ exerciseId, nameRu, nameEn, url }: { exerciseId: st
           ) : (
             <button onClick={() => setPlay(true)} className="absolute inset-0 flex items-center justify-center" aria-label="Смотреть видео">
               <img src={`https://i.ytimg.com/vi/${id}/hqdefault.jpg`} alt="" className="absolute inset-0 size-full object-cover opacity-70" />
-              <span className="relative flex size-16 items-center justify-center rounded-full bg-accent text-black">
+              <span className="relative flex size-16 items-center justify-center rounded-full bg-accent text-on-accent">
                 <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor" aria-hidden><path d="M8 5v14l11-7z" /></svg>
               </span>
             </button>

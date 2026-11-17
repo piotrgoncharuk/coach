@@ -74,7 +74,7 @@ export function DaySheet({ date, onClose }: { date: string | null; onClose: () =
               <div className="grid grid-cols-10 gap-1">
                 {Array.from({ length: 10 }, (_, i) => i + 1).map((n) => (
                   <button key={n} aria-pressed={intensity === n} onClick={() => setIntensity(n)} aria-label={`Тяжесть ${n}`}
-                    className={`tnum h-11 rounded-card text-sm ${intensity === n ? 'bg-accent font-semibold text-black' : 'bg-raised text-fg-2'}`}>{n}</button>
+                    className={`tnum h-11 rounded-card text-sm ${intensity === n ? 'bg-accent font-semibold text-on-accent' : 'bg-raised text-fg-2'}`}>{n}</button>
                 ))}
               </div>
             </div>

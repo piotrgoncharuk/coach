@@ -13,6 +13,7 @@ import { initTheme } from './lib/theme'
 import { META, getMeta, setMeta } from './lib/db'
 import { isCloudConfigured } from './lib/supabase'
 import { ensureExercises } from './lib/exerciseData'
+import { requestPersistence } from './lib/storage'
 import { useLiveQuery } from 'dexie-react-hooks'
 import { db } from './lib/db'
 
@@ -66,6 +67,7 @@ export default function App() {
       stopSync = startAutoSync()
       // справочник подтягивается в фоне: к первому открытию вкладки он уже на месте
       void ensureExercises().catch(() => {})
+      void requestPersistence()
     })()
     const off = onAuthChange((u) => {
       setUser(u)

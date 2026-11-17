@@ -8,6 +8,7 @@ import { save } from '../lib/repo'
 import { getUser, signOut } from '../lib/auth'
 import { isCloudConfigured } from '../lib/supabase'
 import { initTheme, saveTheme, type Theme } from '../lib/theme'
+import { storageInfo } from '../lib/storage'
 import { isStandalone, isWakeLockSupportedLabel } from './profile-info'
 
 const THEMES: { value: Theme; label: string }[] = [
@@ -21,6 +22,7 @@ export function ProfileScreen() {
   const user = getUser()
   const profile = useLiveQuery(() => db.profiles.get(user.id), [user.id])
   const [theme, setTheme] = useState<Theme>('dark')
+  const [storage, setStorage] = useState<{ persisted: boolean | null; usedMb: number | null } | null>(null)
 
   const counts = useLiveQuery(async () => ({
     sessions: await db.sessions.count(),
@@ -31,6 +33,7 @@ export function ProfileScreen() {
 
   useEffect(() => {
     void initTheme().then(setTheme)
+    void storageInfo().then(setStorage)
   }, [])
 
   async function patch(field: 'displayName' | 'kcalTarget' | 'proteinTarget' | 'heightCm', value: string) {
@@ -137,6 +140,7 @@ export function ProfileScreen() {
           <Row label="Установлено на домашний экран" value={isStandalone() ? 'да' : 'нет'} />
           <Row label="Экран не гаснет в зале" value={isWakeLockSupportedLabel()} />
           <Row label="Вибрация по окончании отдыха" value="недоступна в Safari на iOS" />
+          <Row label="Хранилище" value={storage ? `${storage.persisted ? 'постоянное' : storage.persisted === false ? 'обычное' : 'нет данных'}${storage.usedMb != null ? `, ${String(storage.usedMb).replace('.', ',')} МБ` : ''}` : '…'} />
         </dl>
         <Button className="mt-3 w-full" onClick={() => navigate('/install')}>
           Как установить на iPhone

@@ -21,7 +21,7 @@ export function LoginScreen({ onContinueLocal }: { onContinueLocal: () => void }
   return (
     <div className="pt-safe pb-safe px-safe flex min-h-dvh flex-col justify-center gap-4">
       <div className="text-center">
-        <div className="mx-auto mb-3 flex size-16 items-center justify-center rounded-lg bg-accent text-2xl font-bold text-black">
+        <div className="mx-auto mb-3 flex size-16 items-center justify-center rounded-lg bg-accent text-2xl font-bold text-on-accent">
           C
         </div>
         <h1 className="text-xl font-semibold">Coach</h1>

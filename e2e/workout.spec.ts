@@ -36,8 +36,9 @@ test('тренировка: запись подхода в одно касани
   await page.getByLabel('Поиск упражнения').fill('приседания со штангой')
   await page.getByRole('dialog').getByText('Приседания со штангой', { exact: true }).click()
 
-  // первый раз — подбираем вес степпером
-  for (let i = 0; i < 24; i++) await page.getByRole('button', { name: 'Вес: больше на 2.5' }).click()
+  // первый раз — стартуем с пустого грифа и докручиваем до рабочего
+  await expect(page.locator('output').filter({ hasText: /^20$/ })).toBeVisible()
+  for (let i = 0; i < 16; i++) await page.getByRole('button', { name: 'Вес: больше на 2.5' }).click()
   await expect(page.locator('output').filter({ hasText: /^60$/ })).toBeVisible()
 
   await page.getByRole('button', { name: 'Записать подход' }).click()

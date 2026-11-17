@@ -134,7 +134,7 @@ function ActiveWorkoutView({ w }: { w: NonNullable<ReturnType<typeof useActiveWo
                   className={`flex h-10 shrink-0 items-center gap-1.5 rounded-full px-3 text-sm ${active ? 'bg-accent-soft font-semibold text-accent ring-1 ring-accent' : full ? 'bg-success/15 text-success' : 'bg-raised text-fg-2'}`}>
                   {e.supersetGroup && <span aria-label="суперсет">⇄</span>}
                   <span className="max-w-32 truncate">{i + 1}. {catalog.get(e.exerciseId)?.nameRu ?? '…'}</span>
-                  <span className="tnum text-xs opacity-80">{done}/{e.targetSets ?? '–'}</span>
+                  <span className="tnum text-xs">{done}/{e.targetSets ?? '–'}</span>
                 </button>
               )
             })}
@@ -226,7 +226,7 @@ function ActiveWorkoutView({ w }: { w: NonNullable<ReturnType<typeof useActiveWo
       </main>
 
       {toast && (
-        <div role="status" className="animate-pop pointer-events-none fixed inset-x-4 top-[max(env(safe-area-inset-top),1rem)] z-30 rounded-card bg-record px-4 py-3 text-center font-semibold text-black shadow-lg">
+        <div role="status" className="animate-pop pointer-events-none fixed inset-x-4 top-[max(env(safe-area-inset-top),1rem)] z-30 rounded-card bg-record px-4 py-3 text-center font-semibold text-on-accent shadow-lg">
           Рекорд: {toast.map((r) => `${RECORD_RU[r.kind]} ${fmtKg(r.value)}${r.kind === 'reps' ? '' : ' кг'}`).join(' · ')}
         </div>
       )}

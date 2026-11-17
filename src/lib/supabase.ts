@@ -1,24 +1,23 @@
-import { createClient, type SupabaseClient } from '@supabase/supabase-js'
+import type { SupabaseClient } from '@supabase/supabase-js'
 
 const url = import.meta.env.VITE_SUPABASE_URL
 const anonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
 
-/**
- * Клиент появляется только если заданы обе переменные окружения.
- * Без них приложение работает локально: данные лежат в IndexedDB и не теряются,
- * а очередь отправки ждёт, пока синхронизацию включат.
- */
-export const supabase: SupabaseClient | null =
-  url && anonKey
-    ? createClient(url, anonKey, {
-        auth: {
-          persistSession: true,
-          autoRefreshToken: true,
-          detectSessionInUrl: true,
-          flowType: 'pkce',
-          storageKey: 'coach-auth',
-        },
-      })
-    : null
+/** Синхронизация настроена, если заданы обе переменные окружения. */
+export const isCloudConfigured = !!(url && anonKey)
 
-export const isCloudConfigured = supabase !== null
+let client: Promise<SupabaseClient | null> | null = null
+
+/**
+ * Клиент Supabase грузится только когда он нужен: без ключей приложение
+ * работает локально и не тянет лишние ~120 КБ при каждом открытии в зале.
+ */
+export function getSupabase(): Promise<SupabaseClient | null> {
+  if (!isCloudConfigured) return Promise.resolve(null)
+  client ??= import('@supabase/supabase-js').then(({ createClient }) =>
+    createClient(url!, anonKey!, {
+      auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true, flowType: 'pkce', storageKey: 'coach-auth' },
+    }),
+  )
+  return client
+}

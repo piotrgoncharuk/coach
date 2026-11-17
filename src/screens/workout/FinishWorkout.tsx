@@ -80,7 +80,7 @@ export function FinishWorkout() {
           <div className="grid grid-cols-5 gap-1.5">
             {Array.from({ length: 10 }, (_, i) => i + 1).map((n) => (
               <button key={n} aria-pressed={difficulty === n} onClick={() => setDifficulty(n)}
-                className={`tnum h-12 rounded-card text-lg ${difficulty === n ? 'bg-accent font-semibold text-black' : 'bg-raised text-fg-2'}`}>{n}</button>
+                className={`tnum h-12 rounded-card text-lg ${difficulty === n ? 'bg-accent font-semibold text-on-accent' : 'bg-raised text-fg-2'}`}>{n}</button>
             ))}
           </div>
           <textarea rows={2} value={note} onChange={(e) => setNote(e.currentTarget.value)} placeholder="Заметка о тренировке"

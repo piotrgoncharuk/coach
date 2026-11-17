@@ -4,7 +4,7 @@ import { fmtKg } from '../domain/math'
 type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'danger'
 
 const BUTTON_STYLES: Record<ButtonVariant, string> = {
-  primary: 'bg-accent text-black font-semibold active:bg-accent-press',
+  primary: 'bg-accent text-on-accent font-semibold active:bg-accent-press',
   secondary: 'bg-raised text-fg border border-border active:bg-border',
   ghost: 'text-fg-2 active:bg-raised',
   danger: 'bg-danger/15 text-danger border border-danger/30 active:bg-danger/25',

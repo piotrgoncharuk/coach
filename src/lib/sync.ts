@@ -2,7 +2,8 @@ import { SYNC_TABLES, db, getMeta, setMeta, META } from './db'
 import { toCamel, toSnake } from './case'
 import { pickWinner } from '../domain/merge'
 import type { Syncable } from './models'
-import { supabase } from './supabase'
+import { getSupabase, isCloudConfigured } from './supabase'
+import type { SupabaseClient } from '@supabase/supabase-js'
 
 const PAGE = 500
 const EPOCH = '1970-01-01T00:00:00+00:00'
@@ -27,7 +28,7 @@ export interface RemoteClient {
   ): Promise<{ rows: Record<string, unknown>[]; error: string | null }>
 }
 
-export function supabaseRemote(client = supabase): RemoteClient | null {
+export function supabaseRemote(client: SupabaseClient | null): RemoteClient | null {
   if (!client) return null
   return {
     async upsert(remoteTable, rows) {
@@ -48,7 +49,7 @@ export function supabaseRemote(client = supabase): RemoteClient | null {
 
 // ─── наблюдаемое состояние ──────────────────────────────────────────────────
 let status: SyncStatus = {
-  state: supabase ? 'idle' : 'local-only',
+  state: isCloudConfigured ? 'idle' : 'local-only',
   pending: 0,
   lastSyncAt: null,
   error: null,
@@ -193,7 +194,8 @@ export async function pull(remote: RemoteClient): Promise<{ applied: number }> {
 let running: Promise<SyncStatus> | null = null
 
 /** Отправить своё, забрать чужое. Два одновременных вызова не мешают друг другу. */
-export async function syncNow(remote: RemoteClient | null = supabaseRemote()): Promise<SyncStatus> {
+export async function syncNow(remoteArg?: RemoteClient | null): Promise<SyncStatus> {
+  const remote = remoteArg === undefined ? supabaseRemote(await getSupabase()) : remoteArg
   if (!remote) {
     patchStatus({ state: 'local-only', pending: await db.outbox.count() })
     return status
@@ -237,7 +239,7 @@ export async function syncNow(remote: RemoteClient | null = supabaseRemote()): P
  * нет, поэтому других поводов не существует.
  */
 export function startAutoSync(): () => void {
-  if (!supabase) return () => {}
+  if (!isCloudConfigured) return () => {}
   const trigger = () => void syncNow()
 
   const onVisible = () => {

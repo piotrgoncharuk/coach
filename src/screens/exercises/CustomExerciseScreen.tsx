@@ -68,7 +68,7 @@ export function CustomExerciseScreen() {
               const state = primary.includes(m) ? 'p' : secondary.includes(m) ? 's' : ''
               return (
                 <button key={m} onClick={() => cycle(m)}
-                  className={`h-10 rounded-full px-3.5 text-sm ${state === 'p' ? 'bg-accent font-semibold text-black' : state === 's' ? 'bg-accent-soft text-accent ring-1 ring-accent' : 'bg-raised text-fg-2'}`}>
+                  className={`h-10 rounded-full px-3.5 text-sm ${state === 'p' ? 'bg-accent font-semibold text-on-accent' : state === 's' ? 'bg-accent-soft text-accent ring-1 ring-accent' : 'bg-raised text-fg-2'}`}>
                   {MUSCLE_RU[m]}
                 </button>
               )

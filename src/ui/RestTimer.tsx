@@ -37,7 +37,9 @@ export function RestTimerPanel({
         </div>
       </div>
 
-      <div className="h-1.5 overflow-hidden rounded-full bg-raised" role="progressbar" aria-valuenow={Math.round(t.fraction * 100)} aria-valuemin={0} aria-valuemax={100}>
+      <div className="h-1.5 overflow-hidden rounded-full bg-raised" role="progressbar" aria-label="Отдых"
+        aria-valuenow={Math.round(t.fraction * 100)} aria-valuemin={0} aria-valuemax={100}
+        aria-valuetext={t.done ? 'Отдых закончен' : `Осталось ${formatMmSs(t.left)}`}>
         <div
           className={`h-full rounded-full transition-[width] duration-200 ${t.done ? 'bg-success' : 'bg-accent'}`}
           style={{ width: `${t.fraction * 100}%` }}

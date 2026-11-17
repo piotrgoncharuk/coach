@@ -29,7 +29,7 @@ export function Scale({ label, value, onChange, low, high }: { label: string; va
       <div className="grid grid-cols-5 gap-1.5" role="radiogroup" aria-label={label}>
         {[1, 2, 3, 4, 5].map((n) => (
           <button key={n} role="radio" aria-checked={value === n} onClick={() => onChange(n)}
-            className={`tnum h-12 rounded-card text-lg ${value === n ? 'bg-accent font-semibold text-black' : 'bg-raised text-fg-2'}`}>{n}</button>
+            className={`tnum h-12 rounded-card text-lg ${value === n ? 'bg-accent font-semibold text-on-accent' : 'bg-raised text-fg-2'}`}>{n}</button>
         ))}
       </div>
     </div>

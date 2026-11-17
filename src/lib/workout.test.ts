@@ -172,3 +172,14 @@ describe('тренировка', () => {
     expect(await getMeta(META.activeSessionId, 'x')).toBeNull()
   })
 })
+
+describe('первый подход упражнения', () => {
+  it('калибровка начинается с пустого грифа, а не с нуля', async () => {
+    await seed()
+    const sid = await startSession()
+    const se = await addExercise(sid, 'squat')
+    const p = await prefillFor(se)
+    expect(p.suggestion?.outcome).toBe('calibration')
+    expect(p.weightKg).toBe(20)
+  })
+})

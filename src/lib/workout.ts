@@ -196,9 +196,23 @@ export async function prefillFor(se: SessionExercise, deload = false): Promise<P
   const lastHere = done.filter((s) => s.type !== 'warmup').at(-1)
   if (lastHere) return { weightKg: lastHere.weightKg, reps: lastHere.reps, rir: lastHere.rir ?? target.rir, suggestion, lastTime }
 
-  let weight = suggestion.weightKg ?? 0
+  // первый раз: с пустого грифа или лёгкого снаряда, а не с нуля
+  let weight = suggestion.weightKg ?? startingWeight(ex?.equipment ?? null)
   if (deload && weight) weight = Math.round((weight * DELOAD_PRESET.weightMultiplier) / 2.5) * 2.5
   return { weightKg: weight, reps: suggestion.repTarget, rir: suggestion.rir, suggestion, lastTime }
+}
+
+/** Стартовый вес калибровки: пустой гриф, лёгкие гантели, лёгкий блин в тренажёре. */
+export function startingWeight(equipment: string | null): number {
+  switch (equipment) {
+    case 'barbell': return 20
+    case 'e-z curl bar': return 10
+    case 'dumbbell': return 10
+    case 'kettlebells': return 12
+    case 'cable': return 15
+    case 'machine': return 20
+    default: return 0
+  }
 }
 
 async function planned(se: SessionExercise): Promise<ProgramExercise | null> {

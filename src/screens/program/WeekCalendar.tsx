@@ -48,7 +48,7 @@ export function WeekCalendar() {
             const label = `${humanDate(date)}: ${[gym ? `зал ${day?.name ?? ''}` : '', foot ? 'футбол' : '', !gym && !foot ? 'отдых' : ''].filter(Boolean).join(', ')}`
             return (
               <button key={date} onClick={() => setOpenDate(date)} aria-label={label}
-                className={`flex min-h-[4.5rem] flex-col items-center gap-0.5 rounded-card py-1.5 ${isToday ? 'ring-1 ring-accent' : ''} ${past ? 'opacity-60' : ''} bg-raised`}>
+                className={`flex min-h-[4.5rem] flex-col items-center gap-0.5 rounded-card py-1.5 ${isToday ? 'bg-raised ring-1 ring-accent' : past ? 'ring-1 ring-border' : 'bg-raised'}`}>
                 <span className="text-[11px] text-fg-3">{WEEKDAY_SHORT[weekday(date)]}</span>
                 <span className="tnum text-sm">{Number(date.slice(8))}</span>
                 <span className="flex h-6 items-center gap-0.5 text-sm font-semibold">

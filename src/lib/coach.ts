@@ -9,7 +9,7 @@ import {
   type DiffLine, type ProgramSnapshot,
 } from '../domain'
 import type { Proposal as ProposalRow } from './models'
-import { supabase } from './supabase'
+import { isCloudConfigured } from './supabase'
 
 // ─── ссылки на упражнения ───────────────────────────────────────────────────
 /** UUID, id открытой базы или название по-русски/по-английски → UUID. */
@@ -111,7 +111,7 @@ export async function revokeToken(id: string) {
 
 export function mcpUrl(): string | null {
   const url = import.meta.env.VITE_SUPABASE_URL
-  return supabase && url ? `${url.replace(/\/$/, '')}/functions/v1/mcp` : null
+  return isCloudConfigured && url ? `${url.replace(/\/$/, '')}/functions/v1/mcp` : null
 }
 
 // ─── сводка для тренера ─────────────────────────────────────────────────────

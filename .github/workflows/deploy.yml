@@ -50,8 +50,14 @@ jobs:
       - name: Фото упражнений
         run: npm run exercises:images
 
+      # Ключи Supabase — переменные репозитория (Settings → Secrets and variables →
+      # Actions → Variables). Пустые — приложение работает только на устройстве.
+      # anon key публичный по замыслу Supabase: доступ ограничивает RLS.
       - name: Сборка
         run: npm run build
+        env:
+          VITE_SUPABASE_URL: ${{ vars.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_ANON_KEY: ${{ vars.VITE_SUPABASE_ANON_KEY }}
 
       - uses: actions/upload-pages-artifact@v3
         with:

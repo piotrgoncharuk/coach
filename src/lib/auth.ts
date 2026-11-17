@@ -1,7 +1,7 @@
 import { db, META, setMeta, SYNC_TABLES } from './db'
 import { LOCAL_USER_ID, newId } from './ids'
 import { currentUserId, setCurrentUserId } from './repo'
-import { supabase } from './supabase'
+import { getSupabase } from './supabase'
 import type { Profile } from './models'
 
 export interface AuthUser {
@@ -30,6 +30,7 @@ function emit(user: AuthUser): void {
 
 /** Запуск: поднимаем сохранённую сессию или остаёмся в локальном режиме. */
 export async function initAuth(): Promise<AuthUser> {
+  const supabase = await getSupabase()
   if (!supabase) {
     const id = await currentUserId()
     emit({ id, email: null, local: true })
@@ -66,6 +67,7 @@ export async function initAuth(): Promise<AuthUser> {
 
 /** Вход по ссылке из письма. Пароля нет вообще. */
 export async function signInWithEmail(email: string): Promise<{ error: string | null }> {
+  const supabase = await getSupabase()
   if (!supabase) return { error: 'Синхронизация не настроена: нет переменных окружения.' }
   const { error } = await supabase.auth.signInWithOtp({
     email: email.trim(),
@@ -79,6 +81,7 @@ export async function signInWithEmail(email: string): Promise<{ error: string | 
  * тренировок при выходе — худшее, что может сделать дневник.
  */
 export async function signOut(): Promise<void> {
+  const supabase = await getSupabase()
   if (supabase) await supabase.auth.signOut()
   emit({ id: LOCAL_USER_ID, email: null, local: true })
 }

@@ -13,11 +13,13 @@
   --c-border: #262d36;
   --c-text: #f2f5f8;
   --c-text-2: #9ba7b4;
-  --c-text-3: #5f6b78;
+  --c-text-3: #7f8b98;
 
   --c-accent: #ff6a2b;
   --c-accent-press: #e25413;
   --c-accent-soft: rgb(255 106 43 / 0.12);
+  /* текст на акцентном фоне: чёрный на ярком оранжевом — 7,35:1 */
+  --c-on-accent: #000000;
 
   --c-success: #39d98a;
   --c-warn: #ffb020;
@@ -33,20 +35,23 @@
 
   --c-bg: #f6f7f9;
   --c-surface: #ffffff;
-  --c-raised: #ffffff;
+  /* подложка кнопок и чипов: отличима и от фона, и от карточки */
+  --c-raised: #eceef2;
   --c-border: #e3e7ec;
   --c-text: #11161c;
   --c-text-2: #5a6673;
-  --c-text-3: #8b97a4;
+  --c-text-3: #5c6875;
 
-  --c-accent: #e2540f;
-  --c-accent-press: #bf4409;
-  --c-accent-soft: rgb(226 84 15 / 0.1);
+  /* светлая тема: акцент темнее, чтобы текст акцентом читался даже на мягкой подложке (≥ 4,7:1) */
+  --c-accent: #bb3900;
+  --c-accent-press: #9a2f00;
+  --c-accent-soft: rgb(187 57 0 / 0.08);
+  --c-on-accent: #ffffff;
 
-  --c-success: #17a35f;
-  --c-warn: #b36b00;
-  --c-danger: #d93437;
-  --c-record: #b8860b;
+  --c-success: #00813d;
+  --c-warn: #a65e00;
+  --c-danger: #d42f32;
+  --c-record: #986600;
 
   --shadow-sheet: 0 -8px 32px rgb(16 24 40 / 0.12);
   --shadow-card: 0 1px 2px rgb(16 24 40 / 0.06);
@@ -63,6 +68,7 @@
   --color-accent: var(--c-accent);
   --color-accent-press: var(--c-accent-press);
   --color-accent-soft: var(--c-accent-soft);
+  --color-on-accent: var(--c-on-accent);
   --color-success: var(--c-success);
   --color-warn: var(--c-warn);
   --color-danger: var(--c-danger);

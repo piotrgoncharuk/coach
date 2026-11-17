@@ -72,7 +72,7 @@ export function Confirm({
         <button onClick={onClose} className="min-h-touch rounded-card border border-border bg-raised">Отмена</button>
         <button
           onClick={() => { onConfirm(); onClose() }}
-          className={`min-h-touch rounded-card font-semibold ${danger ? 'bg-danger text-white' : 'bg-accent text-black'}`}
+          className={`min-h-touch rounded-card font-semibold ${danger ? 'bg-danger text-white' : 'bg-accent text-on-accent'}`}
         >
           {confirm}
         </button>
