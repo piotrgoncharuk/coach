@@ -31,6 +31,7 @@ npm run preview      # посмотреть собранное
 npm test               # юнит и интеграционные тесты (vitest, IndexedDB в памяти)
 npm run test:db        # миграции, изоляция данных и MCP-сервер на временном Postgres
 npm run e2e            # ключевые сценарии в Playwright, включая аудит доступности axe
+E2E_BASE_URL=https://piotrgoncharuk.github.io/coach/ npm run e2e   # то же по живому адресу
 npm run mcp:smoke      # Edge Function в настоящем Deno по HTTP (DENO=/путь/к/deno)
 npm run lint
 ```
